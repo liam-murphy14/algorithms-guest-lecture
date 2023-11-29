@@ -1,0 +1,166 @@
+\documentclass[11pt]{exam}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsfonts, amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{mathpazo}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+% in order to compile this file you need to get 'header.tex' from
+% Canvas and change the line below to the appropriate file path
+\input{../header}
+
+
+\begin{document}
+\section*{Knight's Path}
+
+{\large Description}\\
+Given an $n\times n$ chess board, a starting position, and ending position,
+and a bishop position, compute the shortest path a knight starting at the
+start position and ending at the end position can take without being
+threatened by the bishop. If the knight can capture the bishop, then
+it is free to take any path.\\
+\textbf{Formally:} given an integer pair $(x_0,y_0)$ starting position, an integer pair $(x_1, y_1)$ ending position, and an integer pair $(p, q)$ bishop position, compute the shortest path from the start to the end without being threatened by the bishop, returning $-1$ if no path exists.\\\\
+{\large Notes}\\
+A knight can move in an L-shape. That is, given some position $(p,q)$ on
+the board, the knight can move to $(p+1,q+2), (p+2,q+1), (p-1,q+2)$, etc.
+Here is a picture for better visualization.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{knight_moves.png}
+	\caption{A knight's possible moves}
+\end{figure}
+The shortest path is one with the fewest of such moves. Now, the bishop moves on diagonals. That is, given a position $(p,q)$ on the board, the bishop threatens any position diagonal from $(p, q)$.
+
+\newpage
+\section*{Solution}
+\textbf{Idea:} Treat the chessboard as a graph, and use a known graph traversal algorithm (BFS) to solve!
+\begin{enumerate}
+	\item Set up functions to construct nodes, check their validity, and create a list of nodes that the bishop threatens
+	\item Create a BFS function that accounts for the possible threat of the bishop
+	\item Wire up our constructions to solve the problem
+	\item Optimize if time remains
+\end{enumerate}
+\section*{Set Up}
+\begin{algorithm}[H]
+\begin{algorithmic}
+\Procedure{Make-Node}{$x,y,d$}
+	\Return{$(x,y,d)$}
+\algorithmiccomment{{\it A Node is a 3-Tuple with an x coordinate, y coordinate, and integer distance}}
+\EndProcedure
+\Procedure{Is-Valid}{$x,y,n$}
+	\If{$x<1$ or $y<1$ or $x>n$ or $y>n$}
+		\Return{false}
+	\EndIf
+	\Return{true}
+\EndProcedure
+\Procedure{Is-Valid-Bishop}{$x,y,A$}
+	\If{$(x,y)$ in $A$}
+		\Return{false}
+	\EndIf
+	\Return{true}
+\EndProcedure
+\Procedure{Bishop-Positions}{$x,y,n$}
+	\State{$A\gets\emptyset$}
+	\For{$i\in\set{1,2,\ldots,n}$}
+		\If{\Call{Is-Valid}{$x+i,y+i,n$}}
+			\State{$A.add(x,y)$}
+		\EndIf
+		\If{\Call{Is-Valid}{$x-i,y+i,n$}}
+			\State{$A.add(x,y)$}
+		\EndIf
+		\If{\Call{Is-Valid}{$x+i,y-i,n$}}
+			\State{$A.add(x,y)$}
+		\EndIf
+		\If{\Call{Is-Valid}{$x-i,y-i,n$}}
+			\State{$A.add(x,y)$}
+		\EndIf
+	\EndFor
+	\Return{$A$}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% We want to design an algorithm that treats the chessboard as a graph, then use BFS to find the shortest path (with a few modifications, of course).
+% However, we can't just make the entire chessboard, a graph, because the
+% knight can't move to just any space! Here's the idea: use BFS to determine
+% how many moves it would take to reach the bishop, capture, then move to the
+% ending position (or if this is even possible) and compare it with just
+% avoiding the bishop's threat and going straight to the end position (if
+% this is even possible). Return the length of the shorter path, if either
+% answer reaches the end space.\\\\
+% {\large 1. Set up}\\
+% First, we need to set up the framework that will allow us to treat the chessboard as a graph. We will define three functions. The first is a ``constructor'' of sorts to create nodes, which are 3-Tuples consisting of row and column coordinates, and a distance, which will represent the distance (in knight moves) from the first space. The second checks if a node is valid (i.e. on our chessboard). The third creates a set of nodes threatened by the bishop. Recall that if the bishop is on a square $(x,y)$, then it threatens all squares $\set{(x\pm i, y\pm i):i=1,2,\ldots}$.
+\section*{Modified BFS}
+\begin{algorithm}[H]
+\begin{algorithmic}
+\Procedure{Shortest-Path}{$x_0,y_0,x_1,y_1,n,b,A$}
+\algorithmiccomment{{\it $x_0,y_0$ is start position, $x_1,y_1$ is end position, $n$ is dimension, and $b$ is a Boolean for if the bishop exists}}
+	\State{$row\gets\set{2,2,-2,-2,1,1,-1,-1}$}
+	\State{$col\gets\set{-1,1,1,-1,2,-2,2,-2}$}
+	\State{$visited\gets\emptyset$}
+	\State{Queue $Q\gets \{\Call{Make-Node}{x_0,y_0,0}\}$}
+	\While{$Q\neq\emptyset$}
+		\State{$v\gets Q.pop$}
+		\If{$v.x=x_1$ and $v.y=y_1$}
+			\Return{$v.d$}
+		\EndIf
+		\If{$v\notin visited$}
+			\State{$visited.add(v)$}
+			\For{$i\in\set{1,2,\ldots,8}$}
+				\State{$x_{new}\gets v.x+col[i]$}
+				\State{$y_{new}\gets v.y+row[i]$}
+				\If{$b=true$}
+					\If{\Call{Is-Valid}{$x_{new},y_{new},n$} and \Call{Is-Valid-Bishop}{$x_{new},y_{new},A$}}
+						\State{$Q.add(\Call{Make-Node}{x_{new},y_{new},v.d+1})$}
+					\EndIf
+				\Else
+					\If{\Call{Is-Valid}{$x_{new},y_{new},n$}}
+						\State{$Q.add(\Call{Make-Node}{x_{new},y_{new},v.d+1})$}
+					\EndIf
+				\EndIf
+			\EndFor
+		\EndIf
+	\EndWhile
+	\Return{-1}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+\section*{Final}
+\begin{algorithm}[H]
+\begin{algorithmic}
+\Procedure{Knight's-Path}{$x_0,y_0,x_1,y_1,b_x,b_y,n$}
+	\State{$A\gets$ \Call{Bishop-Positions}{$b_x,b_y,n$}}
+	\State{to-bishop $\gets$ \Call{Shortest-Path}{$x_0,y_0,b_x,b_y,n,true,A$}}
+	\State{to-goal $\gets$ \Call{Shortest-Path}{$x_0,y_0,x_1,y_1,n,true,A$}}
+	\If{to-bishop $\neq -1$}
+		\State{b-to-goal $\gets$ \Call{Shortest-Path}{$b_x,b_y,x_1,y_1,n,false,A$}}
+		\If{b-to-goal $\neq -1$}
+			\If{to-goal $\neq -1$}
+				\Return{$\min(\text{to-bishop}+\text{b-to-goal},\text{to-goal})$}
+			\Else\ 
+				\Return{$\text{to-bishop}+\text{b-to-goal}$}
+			\EndIf
+		\Else\  
+			\Return{to-goal}
+		\EndIf
+	\Else\  
+		\Return{to-goal}
+	\EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+\section*{Optimizations}
+While this solution should be able to handle pretty large instances of the problem, what if we get a really, really big one? If the start and end are sufficiently far away, our algorithm may take too long to find a solution (at least, too long for hackerrank). How can we optimize?\\
+\textbf{Idea:} Run a modified BFS from either end, and see if/where they meet!
+\end{document}
