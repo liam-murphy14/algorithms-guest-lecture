@@ -42,7 +42,13 @@ profile [type] [start_x] [start_y] [end_x] [end_y] [bishop_x] [bishop_y] [n]
 
 Run the program with profiling. If no arguments are provided, the user will be prompted for them.
 
-##### Types
+```shell
+help
+```
+
+Show this help message.
+
+##### Profile Types
 
 ```shell
 cli
@@ -55,9 +61,3 @@ gui
 ```
 
 Profile the gui. This is more complex.
-
-```shell
-help
-```
-
-Show this help message.
