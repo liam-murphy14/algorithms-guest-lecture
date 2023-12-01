@@ -13,13 +13,14 @@ from tkinter import ttk
 from collections import deque
 import time
 import sys
+import cProfile
 
 GREEN = "#B3C7A5"
 RED = "#AE4D5B"
 WHITE = "#FEF9EB"
 GREY = "#C0C0C0"
-CHESS_SIZE = 650  # TODO: make responsive/ no hardcoding
-MARGIN = 25  # TODO: make responsive/ no hardcoding
+CHESS_SIZE = 650
+MARGIN = 25
 
 DEFAULT_N = 8
 DEFAULT_START_X = 4
@@ -42,6 +43,7 @@ class KnightMoves:
         n: int = DEFAULT_N,
         sleep_time: float = 0.1,
         debug: bool = False,
+        profile: bool = False,
     ):
         if debug:
             self.run_cli_debug(
@@ -52,6 +54,7 @@ class KnightMoves:
                 bishop_x,
                 bishop_y,
                 n,
+                profile=profile,
             )
         else:
             self.window = tk.Tk()
@@ -85,6 +88,7 @@ class KnightMoves:
         bishop_x: int,
         bishop_y: int,
         n: int,
+        profile: bool = False,
     ):
         """
         Run the CLI with debug.
@@ -92,10 +96,10 @@ class KnightMoves:
         self._get_bishop_positions(bishop_x, bishop_y, n)
         self.running = True
         print(
-            f"Shortest path length BFS: {self.bfs(start_x, start_y, end_x, end_y, n, bishop_x, bishop_y, debug=True)}"
+            f"Shortest path length BFS: {self.bfs(start_x, start_y, end_x, end_y, n, bishop_x, bishop_y, debug=not profile)}"
         )
         print(
-            f"Shortest path length DBFS: {self.dbfs(start_x, start_y, end_x, end_y, n, bishop_x, bishop_y, debug=True)}"
+            f"Shortest path length DBFS: {self.dbfs(start_x, start_y, end_x, end_y, n, bishop_x, bishop_y, debug=not profile)}"
         )
 
     def bfs(
@@ -685,9 +689,164 @@ if __name__ == "__main__":
                 sleep_time=0,
                 debug=True,
             )
+        elif sys.argv[1] == "profile":
+            if len(sys.argv) > 2:
+                if sys.argv[2] == "cli":
+                    this_start_x = (
+                        _int_or_default(sys.argv[3], DEFAULT_START_X)
+                        if len(sys.argv) > 3
+                        else _int_or_default(
+                            input(f"Start x ({DEFAULT_START_X}): "), DEFAULT_START_X
+                        )
+                    )
+                    this_start_y = (
+                        _int_or_default(sys.argv[4], DEFAULT_START_Y)
+                        if len(sys.argv) > 4
+                        else _int_or_default(
+                            input(f"Start y ({DEFAULT_START_Y}): "), DEFAULT_START_Y
+                        )
+                    )
+                    this_end_x = (
+                        _int_or_default(sys.argv[5], DEFAULT_END_X)
+                        if len(sys.argv) > 5
+                        else _int_or_default(
+                            input(f"End x ({DEFAULT_END_X}): "), DEFAULT_END_X
+                        )
+                    )
+                    this_end_y = (
+                        _int_or_default(sys.argv[6], DEFAULT_END_Y)
+                        if len(sys.argv) > 6
+                        else _int_or_default(
+                            input(f"End y ({DEFAULT_END_Y}): "), DEFAULT_END_Y
+                        )
+                    )
+                    this_bishop_x = (
+                        _int_or_default(sys.argv[7], DEFAULT_BISHOP_X)
+                        if len(sys.argv) > 7
+                        else _int_or_default(
+                            input(f"Bishop x ({DEFAULT_BISHOP_X}): "), DEFAULT_BISHOP_X
+                        )
+                    )
+                    this_bishop_y = (
+                        _int_or_default(sys.argv[8], DEFAULT_BISHOP_Y)
+                        if len(sys.argv) > 8
+                        else _int_or_default(
+                            input(f"Bishop y ({DEFAULT_BISHOP_Y}): "), DEFAULT_BISHOP_Y
+                        )
+                    )
+                    this_n = (
+                        _int_or_default(sys.argv[9], DEFAULT_N)
+                        if len(sys.argv) > 9
+                        else _int_or_default(
+                            input(f"Chess board size ({DEFAULT_N}): "), DEFAULT_N
+                        )
+                    )
+
+                    cProfile.run(
+                        "KnightMoves("
+                        + f"{this_start_x}, "
+                        + f"{this_start_y}, "
+                        + f"{this_end_x}, "
+                        + f"{this_end_y}, "
+                        + f"{this_bishop_x}, "
+                        + f"{this_bishop_y}, "
+                        + f"{this_n}, "
+                        + "debug=True, profile=True"
+                        + ")",
+                    )
+                elif sys.argv[2] == "gui":
+                    this_start_x = (
+                        _int_or_default(sys.argv[3], DEFAULT_START_X)
+                        if len(sys.argv) > 3
+                        else _int_or_default(
+                            input(f"Start x ({DEFAULT_START_X}): "), DEFAULT_START_X
+                        )
+                    )
+                    this_start_y = (
+                        _int_or_default(sys.argv[4], DEFAULT_START_Y)
+                        if len(sys.argv) > 4
+                        else _int_or_default(
+                            input(f"Start y ({DEFAULT_START_Y}): "), DEFAULT_START_Y
+                        )
+                    )
+                    this_end_x = (
+                        _int_or_default(sys.argv[5], DEFAULT_END_X)
+                        if len(sys.argv) > 5
+                        else _int_or_default(
+                            input(f"End x ({DEFAULT_END_X}): "), DEFAULT_END_X
+                        )
+                    )
+                    this_end_y = (
+                        _int_or_default(sys.argv[6], DEFAULT_END_Y)
+                        if len(sys.argv) > 6
+                        else _int_or_default(
+                            input(f"End y ({DEFAULT_END_Y}): "), DEFAULT_END_Y
+                        )
+                    )
+                    this_bishop_x = (
+                        _int_or_default(sys.argv[7], DEFAULT_BISHOP_X)
+                        if len(sys.argv) > 7
+                        else _int_or_default(
+                            input(f"Bishop x ({DEFAULT_BISHOP_X}): "), DEFAULT_BISHOP_X
+                        )
+                    )
+                    this_bishop_y = (
+                        _int_or_default(sys.argv[8], DEFAULT_BISHOP_Y)
+                        if len(sys.argv) > 8
+                        else _int_or_default(
+                            input(f"Bishop y ({DEFAULT_BISHOP_Y}): "), DEFAULT_BISHOP_Y
+                        )
+                    )
+                    this_n = (
+                        _int_or_default(sys.argv[9], DEFAULT_N)
+                        if len(sys.argv) > 9
+                        else _int_or_default(
+                            input(f"Chess board size ({DEFAULT_N}): "), DEFAULT_N
+                        )
+                    )
+
+                    cProfile.run(
+                        "KnightMoves("
+                        + f"{this_start_x}, "
+                        + f"{this_start_y}, "
+                        + f"{this_end_x}, "
+                        + f"{this_end_y}, "
+                        + f"{this_bishop_x}, "
+                        + f"{this_bishop_y}, "
+                        + f"{this_n}, "
+                        + "sleep_time=0, "
+                        + ").run_gui()",
+                    )
+                else:
+                    print(
+                        f"Unknown profile type '{sys.argv[2]}'. Refer to README or run 'python3 animations.py help' for more information."
+                    )
+                    exit(1)
+            else:
+                print(
+                    f"Missing profile type. Refer to README or run 'python3 animations.py help' for more information. Defaulting to GUI."
+                )
+                exit(1)
+        elif sys.argv[1] == "help":
+            print(
+                "Usage: python3 animations.py [OPTION]\n\n"
+                "Running without any options will start the GUI.\n\n"
+                "Options:\n"
+                "  debug [start_x] [start_y] [end_x] [end_y] [bishop_x] [bishop_y] [n]\n"
+                "    Run the CLI with debug. If no arguments are provided, the user will be prompted for them.\n"
+                "  profile [type] [start_x] [start_y] [end_x] [end_y] [bishop_x] [bishop_y] [n]\n"
+                "    Run the program with profiling. If no arguments are provided, the user will be prompted for them.\n"
+                "  Types:\n"
+                "    cli\n"
+                "      Profile the cli version (this is akin to profiling the acutual algorithms, with some overhead).\n"
+                "    gui\n"
+                "      Profile the gui. This is more complex.\n"
+                "  help\n"
+                "    Show this help message.\n"
+            )
         else:
             print(
-                f"Unknown option '{sys.argv[1]}'. Please use 'debug' to run in debug mode. Defaulting to GUI."
+                f"Unknown option '{sys.argv[1]}'. Refer to README or run 'python3 animations.py help' for more information. Defaulting to GUI."
             )
             KnightMoves().run_gui()
     else:
