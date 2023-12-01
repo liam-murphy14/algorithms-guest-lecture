@@ -1,5 +1,6 @@
 """
 Provide animations for my lecture.
+TODO: refactor into class
 Outline
 1. show chess board with knight and bishop for intro explanation
 2. go through way to transform into bfs algo
@@ -274,6 +275,7 @@ def _reset_bishop_position():
         bishop_x.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
         image=bishop_img,
     )
+    _reset_chess_board()
     chess_frame.update()
 
 
@@ -311,6 +313,7 @@ def _stop():
     run_buttons_frame.pack(pady=20)
     _reset_chess_board()
     counter_text.set("Visited: 0 nodes")
+    result_text.set("")
 
 
 def _start_bfs():
@@ -318,7 +321,7 @@ def _start_bfs():
     Start the BFS animation loop
     """
     _start()
-    bfs(
+    shortest_path_length = bfs(
         start_x.get(),
         start_y.get(),
         end_x.get(),
@@ -330,6 +333,10 @@ def _start_bfs():
         sleep_time.get(),
         counter_text,
     )
+    if shortest_path_length == -1:
+        result_text.set("No valid path exists!")
+    else:
+        result_text.set(f"Shortest path length: {shortest_path_length}")
 
 
 GREEN = "#B3C7A5"
@@ -367,7 +374,7 @@ chess_frame = tk.Canvas(content, width=CHESS_SIZE, height=CHESS_SIZE)
 chess_frame.grid(row=0, column=0, padx=MARGIN, pady=MARGIN)
 
 
-_reset_chess_board()  # list of lists of rectangle ids
+_reset_chess_board()
 
 # render buttons and counter
 control_frame = ttk.Frame(content)
@@ -376,6 +383,10 @@ control_frame.grid(row=0, column=1, padx=(0, MARGIN), pady=MARGIN)
 counter_text = tk.StringVar(control_frame, value="Visited: 0 nodes")
 counter = ttk.Label(control_frame, textvariable=counter_text, font=("Arial", 44))
 counter.pack()
+
+result_text = tk.StringVar(control_frame, value="")
+result = ttk.Label(control_frame, textvariable=result_text, font=("Arial", 18))
+result.pack(pady=(10, 0))
 
 run_buttons_frame = ttk.Frame(control_frame)
 bfs_button = ttk.Button(
