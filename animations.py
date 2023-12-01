@@ -76,7 +76,6 @@ def bfs(
                 chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
                 # TODO: move knight here and show path ? potentially
                 chess_frame.update()
-                window.after(int(sleep_time * 1000))
             if debug:
                 print(f"Found after {num_visited} nodes")
             return distance
