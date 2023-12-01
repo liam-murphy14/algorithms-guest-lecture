@@ -180,7 +180,7 @@ def dbfs(
 # TKINTER ANIMATIONS
 
 
-def _reset_chess_board() -> tuple[int, int, int]:
+def _reset_chess_board() -> None:
     """
     Reset chess board to original state.
     """
@@ -230,6 +230,7 @@ def _reset_chess_board() -> tuple[int, int, int]:
     global king_img
     king_img = unscaled_king_img.subsample(scale_factor, scale_factor)
 
+    global knight_image_id, bishop_img_id, king_image_id
     knight_image_id = chess_frame.create_image(
         start_y.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
         start_x.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
@@ -246,7 +247,48 @@ def _reset_chess_board() -> tuple[int, int, int]:
         image=bishop_img,
     )
     chess_frame.update()
-    return knight_image_id, bishop_img_id, king_image_id
+
+
+def _reset_knight_position():
+    """
+    Reset knight position to original state.
+    """
+    global knight_image_id
+    chess_frame.delete(knight_image_id)
+    knight_image_id = chess_frame.create_image(
+        start_y.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
+        start_x.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
+        image=knight_img,
+    )
+    chess_frame.update()
+
+
+def _reset_bishop_position():
+    """
+    Reset bishop position to original state.
+    """
+    global bishop_img_id
+    chess_frame.delete(bishop_img_id)
+    bishop_img_id = chess_frame.create_image(
+        bishop_y.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
+        bishop_x.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
+        image=bishop_img,
+    )
+    chess_frame.update()
+
+
+def _reset_king_position():
+    """
+    Reset king position to original state.
+    """
+    global king_image_id
+    chess_frame.delete(king_image_id)
+    king_image_id = chess_frame.create_image(
+        end_y.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
+        end_x.get() * CHESS_SIZE / n.get() + CHESS_SIZE / (2 * n.get()),
+        image=king_img,
+    )
+    chess_frame.update()
 
 
 def _start():
@@ -308,10 +350,16 @@ n = tk.IntVar(value=8)
 n.trace_add("write", lambda *_: _reset_chess_board())
 start_x = tk.IntVar(value=4)
 start_y = tk.IntVar(value=2)
+start_x.trace_add("write", lambda *_: _reset_knight_position())
+start_y.trace_add("write", lambda *_: _reset_knight_position())
 end_x = tk.IntVar(value=2)
 end_y = tk.IntVar(value=6)
+end_x.trace_add("write", lambda *_: _reset_king_position())
+end_y.trace_add("write", lambda *_: _reset_king_position())
 bishop_x = tk.IntVar(value=2)
 bishop_y = tk.IntVar(value=3)
+bishop_x.trace_add("write", lambda *_: _reset_bishop_position())
+bishop_y.trace_add("write", lambda *_: _reset_bishop_position())
 sleep_time = tk.DoubleVar(value=0.1)
 
 # render chess board
@@ -319,11 +367,7 @@ chess_frame = tk.Canvas(content, width=CHESS_SIZE, height=CHESS_SIZE)
 chess_frame.grid(row=0, column=0, padx=MARGIN, pady=MARGIN)
 
 
-(
-    knight_image_id,
-    bishop_img_id,
-    king_image_id,
-) = _reset_chess_board()  # list of lists of rectangle ids
+_reset_chess_board()  # list of lists of rectangle ids
 
 # render buttons and counter
 control_frame = ttk.Frame(content)
@@ -356,31 +400,31 @@ cancel_button.pack()
 
 run_controls_frame = ttk.Frame(control_frame)
 n_label = ttk.Label(run_controls_frame, text="Chess board size:")
-n_entry = ttk.Entry(run_controls_frame, textvariable=n, width=6)
+n_entry = ttk.Entry(run_controls_frame, textvariable=n, width=8)
 n_label.grid(row=0, column=0, padx=10)
 n_entry.grid(row=0, column=1, padx=10, columnspan=2)
 tick_speed_label = ttk.Label(run_controls_frame, text="Tick duration:")
-tick_speed_entry = ttk.Entry(run_controls_frame, textvariable=sleep_time, width=6)
+tick_speed_entry = ttk.Entry(run_controls_frame, textvariable=sleep_time, width=8)
 tick_speed_label.grid(row=1, column=0, padx=10)
 tick_speed_entry.grid(row=1, column=1, padx=10, columnspan=2)
 start_pos_label = ttk.Label(run_controls_frame, text="Start position:")
 start_x_entry = ttk.Entry(run_controls_frame, textvariable=start_x, width=3)
 start_y_entry = ttk.Entry(run_controls_frame, textvariable=start_y, width=3)
 start_pos_label.grid(row=2, column=0, padx=10)
-start_x_entry.grid(row=2, column=1, padx=10)
-start_y_entry.grid(row=2, column=2, padx=10)
+start_x_entry.grid(row=2, column=1, padx=(10, 0))
+start_y_entry.grid(row=2, column=2, padx=(0, 10))
 end_pos_label = ttk.Label(run_controls_frame, text="End position:")
 end_x_entry = ttk.Entry(run_controls_frame, textvariable=end_x, width=3)
 end_y_entry = ttk.Entry(run_controls_frame, textvariable=end_y, width=3)
 end_pos_label.grid(row=3, column=0, padx=10)
-end_x_entry.grid(row=3, column=1, padx=10)
-end_y_entry.grid(row=3, column=2, padx=10)
+end_x_entry.grid(row=3, column=1, padx=(10, 0))
+end_y_entry.grid(row=3, column=2, padx=(0, 10))
 bishop_pos_label = ttk.Label(run_controls_frame, text="Bishop position:")
 bishop_x_entry = ttk.Entry(run_controls_frame, textvariable=bishop_x, width=3)
 bishop_y_entry = ttk.Entry(run_controls_frame, textvariable=bishop_y, width=3)
 bishop_pos_label.grid(row=4, column=0, padx=10)
-bishop_x_entry.grid(row=4, column=1, padx=10)
-bishop_y_entry.grid(row=4, column=2, padx=10)
+bishop_x_entry.grid(row=4, column=1, padx=(10, 0))
+bishop_y_entry.grid(row=4, column=2, padx=(0, 10))
 run_controls_frame.pack(pady=20)
 
 
