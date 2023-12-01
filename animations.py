@@ -123,6 +123,9 @@ def dbfs(
     bishop_x: int,
     bishop_y: int,
     chess_frame: tk.Canvas | None = None,
+    sleep_time: float = 0,
+    counter: tk.StringVar | None = None,
+    debug: bool = False,
 ):
     """
     Run double ended BFS to find shortest path from start to end.
@@ -136,17 +139,57 @@ def dbfs(
     queue_end = deque()
     queue_start.append((start_x, start_y, 0, True))
     queue_end.append((end_x, end_y, 0, True))
+    num_visited = 0
     while queue_start and queue_end:
+        if not running:
+            return -1
+
         x, y, distance, is_bishop_alive = queue_start.popleft()
+
         if (x, y) == (end_x, end_y):
+            if chess_frame is not None:
+                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                # TODO: move knight here and show path ? potentially
+                chess_frame.update()
+            if debug:
+                print(f"Found after {num_visited} nodes")
             return distance
+
         if (x, y, True) in visited_end:
+            if chess_frame is not None:
+                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                # TODO: move knight here and show path ? potentially
+                chess_frame.update()
+            if debug:
+                print(f"Found after {num_visited} nodes")
             return distance + visited_end[(x, y, True)]
+
         if (x, y, False) in visited_end:
+            if chess_frame is not None:
+                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                # TODO: move knight here and show path ? potentially
+                chess_frame.update()
+            if debug:
+                print(f"Found after {num_visited} nodes")
             return distance + visited_end[(x, y, False)]
+
         if (x, y, is_bishop_alive) in visited_start:
+            if debug:
+                print(f"Already visited {(x, y, is_bishop_alive)}")
             continue
+
         visited_start[(x, y, is_bishop_alive)] = distance
+        num_visited += 1
+
+        if debug:
+            print(f"Visiting {(x, y, is_bishop_alive)}")
+        if counter is not None:
+            counter.set(f"Visited: {num_visited} nodes")
+        if chess_frame is not None:
+            chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+            chess_frame.update()
+            time.sleep(sleep_time)
+
         for dx, dy in zip(row, col):
             new_x, new_y = x + dx, y + dy
             if is_bishop_alive and (new_x, new_y) in bishop_positions:
@@ -156,16 +199,56 @@ def dbfs(
                     queue_start.append((new_x, new_y, distance + 1, False))
                 else:
                     queue_start.append((new_x, new_y, distance + 1, is_bishop_alive))
+
+        if not running:
+            return -1
+
         x, y, distance, is_bishop_alive = queue_end.popleft()
+
         if (x, y) == (start_x, start_y):
+            if chess_frame is not None:
+                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                # TODO: move knight here and show path ? potentially
+                chess_frame.update()
+            if debug:
+                print(f"Found after {num_visited} nodes")
             return distance
+
         if (x, y, True) in visited_start:
+            if chess_frame is not None:
+                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                # TODO: move knight here and show path ? potentially
+                chess_frame.update()
+            if debug:
+                print(f"Found after {num_visited} nodes")
             return distance + visited_start[(x, y, True)]
+
         if (x, y, False) in visited_start:
+            if chess_frame is not None:
+                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                # TODO: move knight here and show path ? potentially
+                chess_frame.update()
+            if debug:
+                print(f"Found after {num_visited} nodes")
             return distance + visited_start[(x, y, False)]
+
         if (x, y, is_bishop_alive) in visited_end:
+            if debug:
+                print(f"Already visited {(x, y, is_bishop_alive)}")
             continue
+
         visited_end[(x, y, is_bishop_alive)] = distance
+        num_visited += 1
+
+        if debug:
+            print(f"Visiting {(x, y, is_bishop_alive)}")
+        if counter is not None:
+            counter.set(f"Visited: {num_visited} nodes")
+        if chess_frame is not None:
+            chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+            chess_frame.update()
+            time.sleep(sleep_time)
+
         for dx, dy in zip(row, col):
             new_x, new_y = x + dx, y + dy
             if is_bishop_alive and (new_x, new_y) in bishop_positions:
@@ -333,8 +416,35 @@ def _start_bfs():
         sleep_time.get(),
         counter_text,
     )
-    if shortest_path_length == -1:
+    if shortest_path_length == -1 and running:
         result_text.set("No valid path exists!")
+    elif shortest_path_length == -1 and not running:
+        result_text.set("")
+    else:
+        result_text.set(f"Shortest path length: {shortest_path_length}")
+
+
+def _start_dbfs():
+    """
+    Start the double ended BFS animation loop
+    """
+    _start()
+    shortest_path_length = dbfs(
+        start_x.get(),
+        start_y.get(),
+        end_x.get(),
+        end_y.get(),
+        n.get(),
+        bishop_x.get(),
+        bishop_y.get(),
+        chess_frame,
+        sleep_time.get(),
+        counter_text,
+    )
+    if shortest_path_length == -1 and running:
+        result_text.set("No valid path exists!")
+    elif shortest_path_length == -1 and not running:
+        result_text.set("")
     else:
         result_text.set(f"Shortest path length: {shortest_path_length}")
 
@@ -388,27 +498,6 @@ result_text = tk.StringVar(control_frame, value="")
 result = ttk.Label(control_frame, textvariable=result_text, font=("Arial", 18))
 result.pack(pady=(10, 0))
 
-run_buttons_frame = ttk.Frame(control_frame)
-bfs_button = ttk.Button(
-    run_buttons_frame,
-    text="Run BFS",
-    command=lambda: _start_bfs(),
-)
-bfs_button.grid(row=0, column=0, padx=10)
-dbfs_button = ttk.Button(
-    run_buttons_frame, text="Run Double BFS", command=lambda: print("hi")
-)
-dbfs_button.grid(row=0, column=1, padx=10)
-run_buttons_frame.pack(pady=20)
-
-cancel_buttons_frame = ttk.Frame(control_frame)
-cancel_button = ttk.Button(
-    cancel_buttons_frame,
-    text="Reset",
-    command=_stop,
-)
-cancel_button.pack()
-
 run_controls_frame = ttk.Frame(control_frame)
 n_label = ttk.Label(run_controls_frame, text="Chess board size:")
 n_entry = ttk.Entry(run_controls_frame, textvariable=n, width=8)
@@ -437,6 +526,25 @@ bishop_pos_label.grid(row=4, column=0, padx=10)
 bishop_x_entry.grid(row=4, column=1, padx=(10, 0))
 bishop_y_entry.grid(row=4, column=2, padx=(0, 10))
 run_controls_frame.pack(pady=20)
+
+run_buttons_frame = ttk.Frame(control_frame)
+bfs_button = ttk.Button(
+    run_buttons_frame,
+    text="Run BFS",
+    command=lambda: _start_bfs(),
+)
+bfs_button.grid(row=0, column=0, padx=10)
+dbfs_button = ttk.Button(run_buttons_frame, text="Run Double BFS", command=_start_dbfs)
+dbfs_button.grid(row=0, column=1, padx=10)
+run_buttons_frame.pack(pady=20)
+
+cancel_buttons_frame = ttk.Frame(control_frame)
+cancel_button = ttk.Button(
+    cancel_buttons_frame,
+    text="Reset",
+    command=_stop,
+)
+cancel_button.pack()
 
 
 window.mainloop()
