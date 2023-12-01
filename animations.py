@@ -549,30 +549,35 @@ cancel_button.pack()
 
 window.mainloop()
 
+# running = True
 
 # print(
 #     bfs(
-#         start_pos[0],
-#         start_pos[1],
-#         end_pos[0],
-#         end_pos[1],
-#         n,
-#         bishop_pos[0],
-#         bishop_pos[1],
+#         start_x.get(),
+#         start_y.get(),
+#         end_x.get(),
+#         end_y.get(),
+#         n.get(),
+#         bishop_x.get(),
+#         bishop_y.get(),
 #         None,
-#         0.0,
+#         0,
 #         None,
 #         True,
 #     )
 # )
 # print(
 #     dbfs(
-#         start_pos[0],
-#         start_pos[1],
-#         end_pos[0],
-#         end_pos[1],
-#         n,
-#         bishop_pos[0],
-#         bishop_pos[1],
+#         start_x.get(),
+#         start_y.get(),
+#         end_x.get(),
+#         end_y.get(),
+#         n.get(),
+#         bishop_x.get(),
+#         bishop_y.get(),
+#         None,
+#         0,
+#         None,
+#         True,
 #     )
 # )
