@@ -67,6 +67,7 @@ class KnightMoves:
             self.bishop_x = tk.IntVar(value=bishop_x)
             self.bishop_y = tk.IntVar(value=bishop_y)
             self.sleep_time = tk.DoubleVar(value=sleep_time)
+            self.tick_size = tk.IntVar(value=1)
             self.running = False
 
     def run_gui(self):
@@ -119,6 +120,11 @@ class KnightMoves:
         """
         Run BFS to find shortest path from start to end.
         """
+        tick_size = 1
+        try:
+            tick_size = self.tick_size.get()
+        except AttributeError:
+            pass
         row = [2, 2, -2, -2, 1, 1, -1, -1]
         col = [1, -1, 1, -1, 2, -2, 2, -2]
         visited = set()
@@ -135,9 +141,11 @@ class KnightMoves:
             # check if we found the end
             if (x, y) == (end_x, end_y):
                 if chess_frame is not None:
-                    chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                    chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
                     # TODO: move knight here and show path ? potentially
                     chess_frame.update()
+                if counter is not None:
+                    counter.set(f"Visited: {num_visited} nodes")
                 if debug:
                     print(f"Found after {num_visited} nodes")
                 return distance
@@ -153,12 +161,13 @@ class KnightMoves:
 
             if debug:
                 print(f"Visiting {(x, y, is_bishop_alive)}")
-            if counter is not None:
+            if counter is not None and num_visited % tick_size == 0:
                 counter.set(f"Visited: {num_visited} nodes")
             if chess_frame is not None:
-                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
-                chess_frame.update()
-                time.sleep(sleep_time)
+                chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
+                if num_visited % tick_size == 0:
+                    chess_frame.update()
+                    time.sleep(sleep_time)
 
             for dx, dy in zip(row, col):
                 new_x, new_y = x + dx, y + dy
@@ -191,6 +200,11 @@ class KnightMoves:
         """
         Run double ended BFS to find shortest path from start to end.
         """
+        tick_size = 1
+        try:
+            tick_size = self.tick_size.get()
+        except AttributeError:
+            pass
         row = [2, 2, -2, -2, 1, 1, -1, -1]
         col = [1, -1, 1, -1, 2, -2, 2, -2]
         visited_start = dict()
@@ -208,27 +222,33 @@ class KnightMoves:
 
             if (x, y) == (end_x, end_y):
                 if chess_frame is not None:
-                    chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                    chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
                     # TODO: move knight here and show path ? potentially
                     chess_frame.update()
+                if counter is not None:
+                    counter.set(f"Visited: {num_visited} nodes")
                 if debug:
                     print(f"Found after {num_visited} nodes")
                 return distance
 
             if (x, y, True) in visited_end:
                 if chess_frame is not None:
-                    chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                    chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
                     # TODO: move knight here and show path ? potentially
                     chess_frame.update()
+                if counter is not None:
+                    counter.set(f"Visited: {num_visited} nodes")
                 if debug:
                     print(f"Found after {num_visited} nodes")
                 return distance + visited_end[(x, y, True)]
 
             if (x, y, False) in visited_end:
                 if chess_frame is not None:
-                    chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                    chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
                     # TODO: move knight here and show path ? potentially
                     chess_frame.update()
+                if counter is not None:
+                    counter.set(f"Visited: {num_visited} nodes")
                 if debug:
                     print(f"Found after {num_visited} nodes")
                 return distance + visited_end[(x, y, False)]
@@ -246,9 +266,10 @@ class KnightMoves:
             if counter is not None:
                 counter.set(f"Visited: {num_visited} nodes")
             if chess_frame is not None:
-                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
-                chess_frame.update()
-                time.sleep(sleep_time)
+                chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
+                if num_visited % tick_size == 0:
+                    chess_frame.update()
+                    time.sleep(sleep_time)
 
             for dx, dy in zip(row, col):
                 new_x, new_y = x + dx, y + dy
@@ -269,27 +290,33 @@ class KnightMoves:
 
             if (x, y) == (start_x, start_y):
                 if chess_frame is not None:
-                    chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                    chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
                     # TODO: move knight here and show path ? potentially
                     chess_frame.update()
+                if counter is not None:
+                    counter.set(f"Visited: {num_visited} nodes")
                 if debug:
                     print(f"Found after {num_visited} nodes")
                 return distance
 
             if (x, y, True) in visited_start:
                 if chess_frame is not None:
-                    chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                    chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
                     # TODO: move knight here and show path ? potentially
                     chess_frame.update()
+                if counter is not None:
+                    counter.set(f"Visited: {num_visited} nodes")
                 if debug:
                     print(f"Found after {num_visited} nodes")
                 return distance + visited_start[(x, y, True)]
 
             if (x, y, False) in visited_start:
                 if chess_frame is not None:
-                    chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
+                    chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
                     # TODO: move knight here and show path ? potentially
                     chess_frame.update()
+                if counter is not None:
+                    counter.set(f"Visited: {num_visited} nodes")
                 if debug:
                     print(f"Found after {num_visited} nodes")
                 return distance + visited_start[(x, y, False)]
@@ -307,9 +334,10 @@ class KnightMoves:
             if counter is not None:
                 counter.set(f"Visited: {num_visited} nodes")
             if chess_frame is not None:
-                chess_frame.itemconfig(chess_squares[x][y], fill=GREY)
-                chess_frame.update()
-                time.sleep(sleep_time)
+                chess_frame.itemconfig(self.chess_squares[x][y], fill=GREY)
+                if num_visited % tick_size == 0:
+                    chess_frame.update()
+                    time.sleep(sleep_time)
 
             for dx, dy in zip(row, col):
                 new_x, new_y = x + dx, y + dy
@@ -351,15 +379,26 @@ class KnightMoves:
         """
         Reset chess board to original state.
         """
-        global chess_squares
-        chess_squares = []
-        self._get_bishop_positions(
-            self.bishop_x.get(), self.bishop_y.get(), self.n.get()
-        )
+        try:
+            len(self.chess_squares)
+        except AttributeError:
+            self.chess_squares = []
 
-        for i in range(self.n.get()):
-            chess_row = []
-            for j in range(self.n.get()):
+        n = self.n.get()
+
+        self._get_bishop_positions(self.bishop_x.get(), self.bishop_y.get(), n)
+
+        for i in range(n):
+            chess_row = None
+            new_row = False
+            if i < len(self.chess_squares):
+                chess_row = self.chess_squares[i]
+            else:
+                new_row = True
+                chess_row = []
+
+            for j in range(n):
+                square_id = chess_row[j] if j < len(chess_row) else None
                 color = (
                     RED
                     if (i, j) in self.bishop_positions
@@ -368,22 +407,28 @@ class KnightMoves:
                     else GREEN
                 )
                 x1, y1, x2, y2 = (
-                    j * CHESS_SIZE / self.n.get(),
-                    i * CHESS_SIZE / self.n.get(),
-                    (j + 1) * CHESS_SIZE / self.n.get(),
-                    (i + 1) * CHESS_SIZE / self.n.get(),
+                    j * CHESS_SIZE / n,
+                    i * CHESS_SIZE / n,
+                    (j + 1) * CHESS_SIZE / n,
+                    (i + 1) * CHESS_SIZE / n,
                 )
-                square_frame = self.chess_frame.create_rectangle(
-                    x1,
-                    y1,
-                    x2,
-                    y2,
-                    fill=color,
-                )
-                chess_row.append(square_frame)
-            chess_squares.append(chess_row)
+                if square_id is not None:
+                    self.chess_frame.coords(square_id, x1, y1, x2, y2)
+                    self.chess_frame.itemconfig(square_id, fill=color)
+                    self.chess_frame.tag_raise(square_id)
+                else:
+                    square_id = self.chess_frame.create_rectangle(
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        fill=color,
+                    )
+                    chess_row.append(square_id)
+            if new_row:
+                self.chess_squares.append(chess_row)
         # images
-        SQUARE_WIDTH = CHESS_SIZE / self.n.get()
+        SQUARE_WIDTH = CHESS_SIZE / n
 
         unscaled_knight_img = tk.PhotoImage(file="knight.png")
         scale_factor = int(unscaled_knight_img.width() / SQUARE_WIDTH) + 1
@@ -397,40 +442,63 @@ class KnightMoves:
         scale_factor = int(unscaled_king_img.width() / SQUARE_WIDTH) + 1
         self.king_img = unscaled_king_img.subsample(scale_factor, scale_factor)
 
-        self.knight_image_id = self.chess_frame.create_image(
-            self.start_y.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            self.start_x.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            image=self.knight_img,
-        )
-        self.king_image_id = self.chess_frame.create_image(
-            self.end_y.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            self.end_x.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            image=self.king_img,
-        )
-        self.bishop_img_id = self.chess_frame.create_image(
-            self.bishop_y.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            self.bishop_x.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            image=self.bishop_img,
-        )
+        try:
+            self.chess_frame.itemconfig(self.knight_image_id, image=self.knight_img)
+            self.chess_frame.itemconfig(self.king_image_id, image=self.king_img)
+            self.chess_frame.itemconfig(self.bishop_img_id, image=self.bishop_img)
+            self.chess_frame.coords(
+                self.knight_image_id,
+                self.start_y.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                self.start_x.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+            )
+            self.chess_frame.coords(
+                self.king_image_id,
+                self.end_y.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                self.end_x.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+            )
+            self.chess_frame.coords(
+                self.bishop_img_id,
+                self.bishop_y.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                self.bishop_x.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+            )
+            self.chess_frame.tag_raise(self.knight_image_id)
+            self.chess_frame.tag_raise(self.king_image_id)
+            self.chess_frame.tag_raise(self.bishop_img_id)
+        except AttributeError:
+            self.knight_image_id = self.chess_frame.create_image(
+                self.start_y.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                self.start_x.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                image=self.knight_img,
+            )
+            self.king_image_id = self.chess_frame.create_image(
+                self.end_y.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                self.end_x.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                image=self.king_img,
+            )
+            self.bishop_img_id = self.chess_frame.create_image(
+                self.bishop_y.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                self.bishop_x.get() * CHESS_SIZE / n + CHESS_SIZE / (2 * n),
+                image=self.bishop_img,
+            )
         self.chess_frame.update()
 
     def _reset_knight_position(self):
         """
         Reset knight position to original state.
         """
-        self.chess_frame.delete(self.knight_image_id)
-        self.knight_image_id = self.chess_frame.create_image(
-            self.start_y.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            self.start_x.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            image=self.knight_img,
+        IMAGE_WIDTH = self.knight_img.width()
+        self.chess_frame.moveto(
+            self.knight_image_id,
+            (
+                self.start_y.get() * CHESS_SIZE / self.n.get()
+                + CHESS_SIZE / (2 * self.n.get())
+            )
+            - IMAGE_WIDTH / 2,
+            (
+                self.start_x.get() * CHESS_SIZE / self.n.get()
+                + CHESS_SIZE / (2 * self.n.get())
+            )
+            - IMAGE_WIDTH / 2,
         )
         self.chess_frame.update()
 
@@ -438,16 +506,19 @@ class KnightMoves:
         """
         Reset bishop position to original state.
         """
-        self.chess_frame.delete(self.bishop_img_id)
-        self.bishop_img_id = self.chess_frame.create_image(
-            self.bishop_y.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            self.bishop_x.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            image=self.bishop_img,
-        )
-        self._get_bishop_positions(
-            self.bishop_x.get(), self.bishop_y.get(), self.n.get()
+        IMAGE_WIDTH = self.bishop_img.width()
+        self.chess_frame.moveto(
+            self.bishop_img_id,
+            (
+                self.bishop_y.get() * CHESS_SIZE / self.n.get()
+                + CHESS_SIZE / (2 * self.n.get())
+            )
+            - IMAGE_WIDTH / 2,
+            (
+                self.bishop_x.get() * CHESS_SIZE / self.n.get()
+                + CHESS_SIZE / (2 * self.n.get())
+            )
+            - IMAGE_WIDTH / 2,
         )
         self._reset_chess_board()
         self.chess_frame.update()
@@ -456,13 +527,19 @@ class KnightMoves:
         """
         Reset king position to original state.
         """
-        self.chess_frame.delete(self.king_image_id)
-        self.king_image_id = self.chess_frame.create_image(
-            self.end_y.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            self.end_x.get() * CHESS_SIZE / self.n.get()
-            + CHESS_SIZE / (2 * self.n.get()),
-            image=self.king_img,
+        IMAGE_WIDTH = self.king_img.width()
+        self.chess_frame.moveto(
+            self.king_image_id,
+            (
+                self.end_y.get() * CHESS_SIZE / self.n.get()
+                + CHESS_SIZE / (2 * self.n.get())
+            )
+            - IMAGE_WIDTH / 2,
+            (
+                self.end_x.get() * CHESS_SIZE / self.n.get()
+                + CHESS_SIZE / (2 * self.n.get())
+            )
+            - IMAGE_WIDTH / 2,
         )
         self.chess_frame.update()
 
@@ -533,13 +610,19 @@ class KnightMoves:
         else:
             self.result_text.set(f"Shortest path length: {shortest_path_length}")
 
+    def _handle_n_change(self):
+        """
+        Handle n changing.
+        """
+        self.window.after_idle(self._reset_chess_board)
+
     def _init_window(self):
         """
         Initialize the window and render the chess board.
         """
         self.content = ttk.Frame(self.window)  # TODO: make responsive/ no hardcoding
         self.content.pack()
-        self.n.trace_add("write", lambda *_: self._reset_chess_board())
+        self.n.trace_add("write", lambda *_: self._handle_n_change())
         self.start_x.trace_add("write", lambda *_: self._reset_knight_position())
         self.start_y.trace_add("write", lambda *_: self._reset_knight_position())
         self.end_x.trace_add("write", lambda *_: self._reset_king_position())
@@ -579,6 +662,12 @@ class KnightMoves:
         )
         self.tick_speed_label.grid(row=1, column=0, padx=10)
         self.tick_speed_entry.grid(row=1, column=1, padx=10, columnspan=2)
+        self.tick_size_label = ttk.Label(self.run_controls_frame, text="Tick size:")
+        self.tick_size_entry = ttk.Entry(
+            self.run_controls_frame, textvariable=self.tick_size, width=8
+        )
+        self.tick_size_label.grid(row=2, column=0, padx=10)
+        self.tick_size_entry.grid(row=2, column=1, padx=10, columnspan=2)
         self.start_pos_label = ttk.Label(
             self.run_controls_frame, text="Start position:"
         )
@@ -588,9 +677,9 @@ class KnightMoves:
         self.start_y_entry = ttk.Entry(
             self.run_controls_frame, textvariable=self.start_y, width=3
         )
-        self.start_pos_label.grid(row=2, column=0, padx=10)
-        self.start_x_entry.grid(row=2, column=1, padx=(10, 0))
-        self.start_y_entry.grid(row=2, column=2, padx=(0, 10))
+        self.start_pos_label.grid(row=3, column=0, padx=10)
+        self.start_x_entry.grid(row=3, column=1, padx=(10, 0))
+        self.start_y_entry.grid(row=3, column=2, padx=(0, 10))
         self.end_pos_label = ttk.Label(self.run_controls_frame, text="End position:")
         self.end_x_entry = ttk.Entry(
             self.run_controls_frame, textvariable=self.end_x, width=3
@@ -598,9 +687,9 @@ class KnightMoves:
         self.end_y_entry = ttk.Entry(
             self.run_controls_frame, textvariable=self.end_y, width=3
         )
-        self.end_pos_label.grid(row=3, column=0, padx=10)
-        self.end_x_entry.grid(row=3, column=1, padx=(10, 0))
-        self.end_y_entry.grid(row=3, column=2, padx=(0, 10))
+        self.end_pos_label.grid(row=4, column=0, padx=10)
+        self.end_x_entry.grid(row=4, column=1, padx=(10, 0))
+        self.end_y_entry.grid(row=4, column=2, padx=(0, 10))
         self.bishop_pos_label = ttk.Label(
             self.run_controls_frame, text="Bishop position:"
         )
@@ -610,9 +699,9 @@ class KnightMoves:
         self.bishop_y_entry = ttk.Entry(
             self.run_controls_frame, textvariable=self.bishop_y, width=3
         )
-        self.bishop_pos_label.grid(row=4, column=0, padx=10)
-        self.bishop_x_entry.grid(row=4, column=1, padx=(10, 0))
-        self.bishop_y_entry.grid(row=4, column=2, padx=(0, 10))
+        self.bishop_pos_label.grid(row=5, column=0, padx=10)
+        self.bishop_x_entry.grid(row=5, column=1, padx=(10, 0))
+        self.bishop_y_entry.grid(row=5, column=2, padx=(0, 10))
         self.run_controls_frame.pack(pady=20)
 
         self.run_buttons_frame = ttk.Frame(self.control_frame)

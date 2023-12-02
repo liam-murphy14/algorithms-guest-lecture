@@ -61,3 +61,7 @@ gui
 ```
 
 Profile the gui. This is more complex.
+
+## A word to the wise
+
+Tkinter can be extremely slow. There are particular issues with the `Canvas` object, which we use to create the chess diagram: `Tkinter.Canvas` does not reuse item ids when deleting canvas items and drawing new ones, so when you delete and redraw items over and over, the performance of the GUI tanks. This took be a long time to figure out and I have only seen it [here](https://stackoverflow.com/questions/64956625/tkinter-canvas-slow), so I will rewrite it here so that hopefully it helps someone else.
