@@ -65,3 +65,11 @@ Profile the gui. This is more complex.
 ## A word to the wise
 
 Tkinter can be extremely slow. There are particular issues with the `Canvas` object, which we use to create the chess diagram: `Tkinter.Canvas` does not reuse item ids when deleting canvas items and drawing new ones, so when you delete and redraw items over and over, the performance of the GUI tanks. This took be a long time to figure out and I have only seen it [here](https://stackoverflow.com/questions/64956625/tkinter-canvas-slow), so I will rewrite it here so that hopefully it helps someone else.
+
+## Resources
+
+* [LeetCode](https://leetcode.com/) is a great place to go for practice problems
+* [Cracking the Coding Interview](https://www.crackingthecodinginterview.com/) is a book all about different strategies for coding interviews, and helps categorize the types of problems you might face
+* [Grokking the Coding Interview](https://www.designgurus.io/course/grokking-the-coding-interview) is sort of a mix of Leetcode and Cracking the Coding Interview: it categorizes the problems by common themes, but is interactive and allows you to code up and submit your solutions to the problems as well
+* [Here is a nice resource on Double-ended BFS](https://efficientcodeblog.wordpress.com/2017/12/13/bidirectional-search-two-end-bfs/)
+
