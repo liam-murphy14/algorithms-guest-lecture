@@ -8,6 +8,7 @@ Outline
 4. explain that there are nice optimizations that can be done with double ended bfs
 5. show double ended bfs
 """
+
 import tkinter as tk
 from tkinter import ttk
 from collections import deque
@@ -402,9 +403,7 @@ class KnightMoves:
                 color = (
                     RED
                     if (i, j) in self.bishop_positions
-                    else WHITE
-                    if (i + j) % 2 == 0
-                    else GREEN
+                    else WHITE if (i + j) % 2 == 0 else GREEN
                 )
                 x1, y1, x2, y2 = (
                     j * CHESS_SIZE / n,
@@ -736,44 +735,58 @@ def _int_or_default(value: str, default: int) -> int:
         return default
 
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) > 1:
         if sys.argv[1] == "debug":
             KnightMoves(
-                _int_or_default(sys.argv[2], DEFAULT_START_X)
-                if len(sys.argv) > 2
-                else _int_or_default(
-                    input(f"Start x ({DEFAULT_START_X}): "), DEFAULT_START_X
+                (
+                    _int_or_default(sys.argv[2], DEFAULT_START_X)
+                    if len(sys.argv) > 2
+                    else _int_or_default(
+                        input(f"Start x ({DEFAULT_START_X}): "), DEFAULT_START_X
+                    )
                 ),
-                _int_or_default(sys.argv[3], DEFAULT_START_Y)
-                if len(sys.argv) > 3
-                else _int_or_default(
-                    input(f"Start y ({DEFAULT_START_Y}): "), DEFAULT_START_Y
+                (
+                    _int_or_default(sys.argv[3], DEFAULT_START_Y)
+                    if len(sys.argv) > 3
+                    else _int_or_default(
+                        input(f"Start y ({DEFAULT_START_Y}): "), DEFAULT_START_Y
+                    )
                 ),
-                _int_or_default(sys.argv[4], DEFAULT_END_X)
-                if len(sys.argv) > 4
-                else _int_or_default(
-                    input(f"End x ({DEFAULT_END_X}): "), DEFAULT_END_X
+                (
+                    _int_or_default(sys.argv[4], DEFAULT_END_X)
+                    if len(sys.argv) > 4
+                    else _int_or_default(
+                        input(f"End x ({DEFAULT_END_X}): "), DEFAULT_END_X
+                    )
                 ),
-                _int_or_default(sys.argv[5], DEFAULT_END_Y)
-                if len(sys.argv) > 5
-                else _int_or_default(
-                    input(f"End y ({DEFAULT_END_Y}): "), DEFAULT_END_Y
+                (
+                    _int_or_default(sys.argv[5], DEFAULT_END_Y)
+                    if len(sys.argv) > 5
+                    else _int_or_default(
+                        input(f"End y ({DEFAULT_END_Y}): "), DEFAULT_END_Y
+                    )
                 ),
-                _int_or_default(sys.argv[6], DEFAULT_BISHOP_X)
-                if len(sys.argv) > 6
-                else _int_or_default(
-                    input(f"Bishop x ({DEFAULT_BISHOP_X}): "), DEFAULT_BISHOP_X
+                (
+                    _int_or_default(sys.argv[6], DEFAULT_BISHOP_X)
+                    if len(sys.argv) > 6
+                    else _int_or_default(
+                        input(f"Bishop x ({DEFAULT_BISHOP_X}): "), DEFAULT_BISHOP_X
+                    )
                 ),
-                _int_or_default(sys.argv[7], DEFAULT_BISHOP_Y)
-                if len(sys.argv) > 7
-                else _int_or_default(
-                    input(f"Bishop y ({DEFAULT_BISHOP_Y}): "), DEFAULT_BISHOP_Y
+                (
+                    _int_or_default(sys.argv[7], DEFAULT_BISHOP_Y)
+                    if len(sys.argv) > 7
+                    else _int_or_default(
+                        input(f"Bishop y ({DEFAULT_BISHOP_Y}): "), DEFAULT_BISHOP_Y
+                    )
                 ),
-                _int_or_default(sys.argv[8], DEFAULT_N)
-                if len(sys.argv) > 8
-                else _int_or_default(
-                    input(f"Chess board size ({DEFAULT_N}): "), DEFAULT_N
+                (
+                    _int_or_default(sys.argv[8], DEFAULT_N)
+                    if len(sys.argv) > 8
+                    else _int_or_default(
+                        input(f"Chess board size ({DEFAULT_N}): "), DEFAULT_N
+                    )
                 ),
                 sleep_time=0,
                 debug=True,
