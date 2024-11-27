@@ -10,9 +10,17 @@ The Outline consists of `outline.pdf` and `outline.tex` which are the LaTeX inpu
 
 The demo is written in Python, using Tkinter for the GUI, and vanilla Python for the CLI.
 
-### Installation
+### Installing dependencies
 
-First, be sure that you have a working Python3 installation. Once you have that, be sure to install the Tkinter module through your _system package manager_ if you used a package manager to install Python3 (if you installed the Python.org distribution, then you can skip this step). For me, on macOS, this looks like
+If you have installed a Python.org distribution, rather than installing Python through a package manager, you can skip this section.
+
+#### Option 1: Using Nix
+
+If you have Nix installed with support for flakes, then you don't need to worry about installing any dependencies. Simply `cd` into this directory and run `nix develop` to enter a shell with Python and Tkinter installed.
+
+#### Option 2: Using Python installed through a package manager
+
+First, be sure that you have a working Python3 installation. Once you have that, be sure to install the Tkinter module through the _system package manager_ that you used to install Python3. On macOS using Homebrew, this looks like
 
 ```shell
 brew install python-tk@3.11
@@ -27,6 +35,8 @@ python3 animations.py [OPTION]
 ```
 
 Running without any options will start the GUI.
+
+Alternatively, if you have Nix installed with support for flakes, you can `nix run` directly instead of invoking Python.
 
 #### Options
 

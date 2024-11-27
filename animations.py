@@ -953,3 +953,6 @@ def main():
             KnightMoves().run_gui()
     else:
         KnightMoves().run_gui()
+
+if __name__ == '__main__':
+    main()
