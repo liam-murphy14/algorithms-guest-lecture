@@ -4,7 +4,7 @@
 }:
 
 buildPythonApplication {
-  pname = "algs-guest-lecture";
+  pname = "animation";
   version = "1.0.0";
   pyproject = true;
 
