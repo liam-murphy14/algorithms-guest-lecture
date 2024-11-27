@@ -711,7 +711,9 @@ class KnightMoves:
         )
         self.bfs_button.grid(row=0, column=0, padx=10)
         self.dbfs_button = tk.Button(
-            self.run_buttons_frame, text="Run Double BFS", command=self._start_dbfs
+            self.run_buttons_frame,
+            text="Run Double BFS",
+            command=self._start_dbfs,
         )
         self.dbfs_button.grid(row=0, column=1, padx=10)
         self.run_buttons_frame.pack(pady=20)
@@ -954,5 +956,6 @@ def main():
     else:
         KnightMoves().run_gui()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
