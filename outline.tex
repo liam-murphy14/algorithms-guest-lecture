@@ -1,9 +1,9 @@
 \documentclass[11pt]{exam}
+\usepackage[T1]{fontenc}
+\usepackage[amsthm]{newpx}
 \usepackage[margin=1in]{geometry}
-\usepackage{amsfonts, amsmath, amssymb, amsthm}
 \usepackage{mathtools}
 \usepackage{float}
-\usepackage{amsmath}
 \usepackage{enumerate}
 \usepackage{listings}
 \usepackage{hyperref}
@@ -18,7 +18,7 @@
 
 % in order to compile this file you need to get 'header.tex' from
 % Canvas and change the line below to the appropriate file path
-\input{../header}
+\input{./header}
 
 
 \begin{document}
@@ -102,7 +102,7 @@ answer reaches the end space.
 	\Return{true}
 \EndProcedure
 \Procedure{Bishop-Positions}{$x,y,n$}
-	\State{$A\gets\emptyset$}
+	\State{$A\gets\varnothing$}
 	\For{$i\in\set{1,2,\ldots,n}$}
 		\If{\Call{Is-Valid}{$x+i,y+i,n$}}
 			\State{$A.add(x,y)$}
@@ -123,9 +123,9 @@ answer reaches the end space.
 \algorithmiccomment{{\it $x_0,y_0$ is start position, $x_1,y_1$ is end position, $n$ is dimension, and $b$ is a Boolean for if the bishop exists}}
 	\State{$row\gets\set{2,2,-2,-2,1,1,-1,-1}$}
 	\State{$col\gets\set{-1,1,1,-1,2,-2,2,-2}$}
-	\State{$visited\gets\emptyset$}
+	\State{$visited\gets\varnothing$}
 	\State{Queue $Q\gets \{\Call{Make-Node}{x_0,y_0,0}\}$}
-	\While{$Q\neq\emptyset$}
+	\While{$Q\neq\varnothing$}
 		\State{$v\gets Q.pop$}
 		\If{$v.x=x_1$ and $v.y=y_1$}
 			\Return{$v.d$}

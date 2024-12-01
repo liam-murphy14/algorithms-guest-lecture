@@ -1,13 +1,12 @@
 \documentclass[11pt]{exam}
+\usepackage[T1]{fontenc}
+\usepackage[amsthm]{newpx}
 \usepackage[margin=1in]{geometry}
-\usepackage{amsfonts, amsmath, amssymb, amsthm}
 \usepackage{mathtools}
 \usepackage{float}
-\usepackage{amsmath}
 \usepackage{enumerate}
 \usepackage{listings}
 \usepackage{hyperref}
-\usepackage{mathpazo}
 \usepackage[boxed]{algorithm}
 \usepackage[noend]{algpseudocode}
 \hypersetup{
@@ -19,7 +18,7 @@
 
 % in order to compile this file you need to get 'header.tex' from
 % Canvas and change the line below to the appropriate file path
-\input{../header}
+\input{./header}
 
 
 \begin{document}
@@ -41,7 +40,14 @@ Here is a picture for better visualization.
 	\includegraphics[width=0.7\linewidth]{knight_moves.png}
 	\caption{A knight's possible moves}
 \end{figure}
-The shortest path is one with the fewest of such moves. Now, the bishop moves on diagonals. That is, given a position $(p,q)$ on the board, the bishop threatens any position diagonal from $(p, q)$.
+The shortest path is one with the fewest of such moves.\\\
+Now, the bishop moves on diagonals. That is, given a position $(p,q)$ on the board, the bishop threatens any position diagonal from $(p, q)$. Here is a picture for better visualization.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{bishop_moves.png}
+    \caption{A bishop's threatened positions}
+\end{figure}
+
 
 \newpage
 \section*{Solution}
@@ -72,7 +78,7 @@ The shortest path is one with the fewest of such moves. Now, the bishop moves on
 	\Return{true}
 \EndProcedure
 \Procedure{Bishop-Positions}{$x,y,n$}
-	\State{$A\gets\emptyset$}
+	\State{$A\gets\varnothing$}
 	\For{$i\in\set{1,2,\ldots,n}$}
 		\If{\Call{Is-Valid}{$x+i,y+i,n$}}
 			\State{$A.add(x,y)$}
@@ -108,9 +114,9 @@ The shortest path is one with the fewest of such moves. Now, the bishop moves on
 \algorithmiccomment{{\it $x_0,y_0$ is start position, $x_1,y_1$ is end position, $n$ is dimension, and $b$ is a Boolean for if the bishop exists}}
 	\State{$row\gets\set{2,2,-2,-2,1,1,-1,-1}$}
 	\State{$col\gets\set{-1,1,1,-1,2,-2,2,-2}$}
-	\State{$visited\gets\emptyset$}
+	\State{$visited\gets\varnothing$}
 	\State{Queue $Q\gets \{\Call{Make-Node}{x_0,y_0,0}\}$}
-	\While{$Q\neq\emptyset$}
+	\While{$Q\neq\varnothing$}
 		\State{$v\gets Q.pop$}
 		\If{$v.x=x_1$ and $v.y=y_1$}
 			\Return{$v.d$}

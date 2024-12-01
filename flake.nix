@@ -9,11 +9,62 @@
       forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
         pkgs = import nixpkgs { inherit system; };
       });
+      tex = pkgs: (pkgs.texlive.combine {
+        inherit (pkgs.texlive) scheme-basic latexmk
+          geometry
+          amsfonts
+          amsmath
+          mathtools
+          float
+          fontspec
+          exam
+          etoolbox
+          kastrup
+          listings
+          hyperref
+          newpx
+          newtx
+          pxfonts
+          trimspaces
+          tex-gyre
+          tex-gyre-math
+          unicode-math
+          lualatex-math
+          pagella-otf
+          xcolor
+          xstring
+          xkeyval
+          xpatch
+          fontaxes
+          algorithms
+          algorithmicx
+          algpseudocodex;
+      });
     in
     {
       packages = forEachSupportedSystem ({ pkgs }:
         {
           default = pkgs.python3Packages.callPackage ./default.nix { };
+          documents = pkgs.stdenvNoCC.mkDerivation rec {
+            name = "documents";
+            src = self;
+            buildInputs = [ pkgs.coreutils (tex pkgs) ];
+            phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+            buildPhase = ''
+              export PATH="${pkgs.lib.makeBinPath buildInputs}";
+              mkdir -p .cache/texmf-var
+              env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
+                latexmk -interaction=nonstopmode -pdf -pdflatex -f \
+                outline.tex
+              env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
+                latexmk -interaction=nonstopmode -pdf -pdflatex -f \
+                presentation.tex
+            '';
+            installPhase = ''
+              mkdir -p $out
+              cp outline.pdf presentation.pdf $out/
+            '';
+          };
         });
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
@@ -27,6 +78,7 @@
                 ]
               )
             )
+            (tex pkgs)
           ];
 
         };
