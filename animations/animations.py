@@ -429,15 +429,15 @@ class KnightMoves:
         # images
         SQUARE_WIDTH = CHESS_SIZE / n
 
-        unscaled_knight_img = tk.PhotoImage(file="knight.png")
+        unscaled_knight_img = tk.PhotoImage(file="images/knight.png")
         scale_factor = int(unscaled_knight_img.width() / SQUARE_WIDTH) + 1
         self.knight_img = unscaled_knight_img.subsample(scale_factor, scale_factor)
 
-        unscaled_bishop_img = tk.PhotoImage(file="bishop.png")
+        unscaled_bishop_img = tk.PhotoImage(file="images/bishop.png")
         scale_factor = int(unscaled_bishop_img.width() / SQUARE_WIDTH) + 1
         self.bishop_img = unscaled_bishop_img.subsample(scale_factor, scale_factor)
 
-        unscaled_king_img = tk.PhotoImage(file="king.png")
+        unscaled_king_img = tk.PhotoImage(file="images/king.png")
         scale_factor = int(unscaled_king_img.width() / SQUARE_WIDTH) + 1
         self.king_img = unscaled_king_img.subsample(scale_factor, scale_factor)
 

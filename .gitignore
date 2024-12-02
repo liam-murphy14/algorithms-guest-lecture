@@ -2,3 +2,5 @@
 *.log
 *.out
 .direnv
+notes.txt
+result

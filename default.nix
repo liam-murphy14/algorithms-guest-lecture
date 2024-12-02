@@ -4,7 +4,7 @@
 }:
 
 buildPythonApplication {
-  pname = "animation";
+  pname = "animations";
   version = "1.0.0";
   pyproject = true;
 
