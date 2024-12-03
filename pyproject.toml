@@ -10,6 +10,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+dependencies = [ "click" ]
 
 [project.urls]
 Homepage = "https://github.com/liam-murphy14/algorithms-guest-lecture"

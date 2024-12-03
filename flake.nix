@@ -73,6 +73,7 @@
               python3.withPackages (
                 ps: with ps; [
                   tkinter
+                  click
                   # dev dependencies
                   black
                 ]

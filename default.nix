@@ -1,6 +1,7 @@
 { buildPythonApplication
 , setuptools
 , tkinter
+, click
 }:
 
 buildPythonApplication {
@@ -10,7 +11,7 @@ buildPythonApplication {
 
   src = ./.;
 
-  dependencies = [ tkinter ];
+  dependencies = [ tkinter click ];
 
   build-system = [ setuptools ];
 
