@@ -50,7 +50,6 @@ class KnightMoves:
         self.n = n
         self.logger = self._get_logger(debug)
 
-
     def run_gui(self):
         """
         Run the GUI.
@@ -78,17 +77,10 @@ class KnightMoves:
         Run the CLI.
         """
         self.running = True
-        click.echo(
-            f"Shortest path length unoptimized BFS: {self.unoptimized_bfs()}"
-        )
-        click.echo(
-            f"Shortest path length BFS: {self.bfs(with_gui=False)}"
-        )
-        click.echo(
-            f"Shortest path length DBFS: {self.dbfs(with_gui=False)}"
-        )
+        click.echo(f"Shortest path length unoptimized BFS: {self.unoptimized_bfs()}")
+        click.echo(f"Shortest path length BFS: {self.bfs(with_gui=False)}")
+        click.echo(f"Shortest path length DBFS: {self.dbfs(with_gui=False)}")
         self.running = False
-
 
     def _simple_bfs(
         self,
@@ -131,16 +123,21 @@ class KnightMoves:
                     queue.append((new_x, new_y, distance + 1))
         return -1
 
-
     def unoptimized_bfs(self) -> int:
         """
         Certainly correct (but unoptimized) solution for testing. No GUI implementation.
         """
-        to_bishop = self._simple_bfs(self.start_x, self.start_y, self.bishop_x, self.bishop_y, True)
-        to_goal = self._simple_bfs(self.start_x, self.start_y, self.end_x, self.end_y, True)
+        to_bishop = self._simple_bfs(
+            self.start_x, self.start_y, self.bishop_x, self.bishop_y, True
+        )
+        to_goal = self._simple_bfs(
+            self.start_x, self.start_y, self.end_x, self.end_y, True
+        )
         if to_bishop == -1:
             return to_goal
-        bishop_to_goal = self._simple_bfs(self.bishop_x, self.bishop_y, self.end_x, self.end_y, False)
+        bishop_to_goal = self._simple_bfs(
+            self.bishop_x, self.bishop_y, self.end_x, self.end_y, False
+        )
         if to_goal == -1:
             if bishop_to_goal == -1:
                 return -1
@@ -367,7 +364,6 @@ class KnightMoves:
         self.bishop_positions = bishop_positions
         return bishop_positions
 
-
     def _get_logger(self, debug: bool) -> logging.Logger:
         """
         Get logger.
@@ -385,7 +381,6 @@ class KnightMoves:
         console_handler.setFormatter(format)
         logger.addHandler(console_handler)
         return logger
-
 
     # TKINTER ANIMATIONS
 
@@ -567,7 +562,9 @@ class KnightMoves:
         self.end_y = self.end_y_gui.get()
         self.bishop_x = self.bishop_x_gui.get()
         self.bishop_y = self.bishop_y_gui.get()
-        self.bishop_positions = self._get_bishop_positions(self.bishop_x, self.bishop_y, self.n)
+        self.bishop_positions = self._get_bishop_positions(
+            self.bishop_x, self.bishop_y, self.n
+        )
         self.n = self.n_gui.get()
         self.running = True
 
@@ -649,7 +646,9 @@ class KnightMoves:
 
         self.run_controls_frame = ttk.Frame(self.control_frame)
         self.n_label = ttk.Label(self.run_controls_frame, text="Chess board size:")
-        self.n_entry = ttk.Entry(self.run_controls_frame, textvariable=self.n_gui, width=8)
+        self.n_entry = ttk.Entry(
+            self.run_controls_frame, textvariable=self.n_gui, width=8
+        )
         self.n_label.grid(row=0, column=0, padx=10)
         self.n_entry.grid(row=0, column=1, padx=10, columnspan=2)
         self.tick_speed_label = ttk.Label(

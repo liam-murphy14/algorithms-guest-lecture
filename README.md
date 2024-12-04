@@ -30,8 +30,10 @@ consult [this nice tutorial](https://tkdocs.com/tutorial/install.html) for more 
 
 ### Usage
 
+From the root of the repository, run the following command:
+
 ```shell
-python3 animations.py [OPTION]
+python3 animations/animations.py [OPTION]
 ```
 
 Running without any options will start the GUI.
@@ -41,36 +43,23 @@ Alternatively, if you have Nix installed with support for flakes, you can `nix r
 #### Options
 
 ```shell
-debug [start_x] [start_y] [end_x] [end_y] [bishop_x] [bishop_y] [n]
+gui [start_x] [start_y] [end_x] [end_y] [bishop_x] [bishop_y] [n]
 ```
 
-Run the CLI with debug. If no arguments are provided, the user will be prompted for them.
+Run the GUI with optional starting parameters. If no arguments are provided, the user will be prompted for them.
 
 ```shell
-profile [type] [start_x] [start_y] [end_x] [end_y] [bishop_x] [bishop_y] [n]
+cli [start_x] [start_y] [end_x] [end_y] [bishop_x] [bishop_y] [n]
+```
+
+Run the CLI with starting parameters. If no arguments are provided, the user will be prompted for them.
+
+```shell
+profile [start_x] [start_y] [end_x] [end_y] [bishop_x] [bishop_y] [n]
 ```
 
 Run the program with profiling. If no arguments are provided, the user will be prompted for them.
 
-```shell
-help
-```
-
-Show this help message.
-
-##### Profile Types
-
-```shell
-cli
-```
-
-Profile the cli version (this is akin to profiling the acutual algorithms, with some overhead).
-
-```shell
-gui
-```
-
-Profile the gui. This is more complex.
 
 ## A word to the wise
 
