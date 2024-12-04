@@ -4,3 +4,4 @@
 .direnv
 notes.txt
 result
+__pycache__

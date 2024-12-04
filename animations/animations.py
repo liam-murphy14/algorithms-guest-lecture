@@ -166,8 +166,11 @@ class KnightMoves:
         queue.append((self.start_x, self.start_y, 0, True))
         num_visited = 0
         while queue:
-            if not self.running:
-                return -1
+            try:
+                if not self.running:
+                    return -1
+            except AttributeError:
+                pass
 
             x, y, distance, is_bishop_alive = queue.popleft()
 
@@ -227,8 +230,11 @@ class KnightMoves:
         queue_end.append((self.end_x, self.end_y, 0, True))
         num_visited = 0
         while queue_start and queue_end:
-            if not self.running:
-                return -1
+            try:
+                if not self.running:
+                    return -1
+            except AttributeError:
+                pass
 
             x, y, distance, is_bishop_alive = queue_start.popleft()
 
@@ -277,8 +283,11 @@ class KnightMoves:
                             (new_x, new_y, distance + 1, is_bishop_alive)
                         )
 
-            if not self.running:
-                return -1
+            try:
+                if not self.running:
+                    return -1
+            except AttributeError:
+                pass
 
             x, y, distance, is_bishop_alive = queue_end.popleft()
 
