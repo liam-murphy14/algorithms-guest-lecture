@@ -751,18 +751,18 @@ def cli_wrapper(ctx):
 
 @cli_wrapper.command(help="Run the algorithm CLI in debug mode.")
 @click.option(
-    "--start_x", default=DEFAULT_START_X, help="Start x position.", prompt=True
+    "--start-x", default=DEFAULT_START_X, help="Start x position.", prompt=True
 )
 @click.option(
-    "--start_y", default=DEFAULT_START_Y, help="Start y position.", prompt=True
+    "--start-y", default=DEFAULT_START_Y, help="Start y position.", prompt=True
 )
-@click.option("--end_x", default=DEFAULT_END_X, help="End x position.", prompt=True)
-@click.option("--end_y", default=DEFAULT_END_Y, help="End y position.", prompt=True)
+@click.option("--end-x", default=DEFAULT_END_X, help="End x position.", prompt=True)
+@click.option("--end-y", default=DEFAULT_END_Y, help="End y position.", prompt=True)
 @click.option(
-    "--bishop_x", default=DEFAULT_BISHOP_X, help="Bishop x position.", prompt=True
+    "--bishop-x", default=DEFAULT_BISHOP_X, help="Bishop x position.", prompt=True
 )
 @click.option(
-    "--bishop_y", default=DEFAULT_BISHOP_Y, help="Bishop y position.", prompt=True
+    "--bishop-y", default=DEFAULT_BISHOP_Y, help="Bishop y position.", prompt=True
 )
 @click.option("--n", default=DEFAULT_N, help="Chess board size.", prompt=True)
 @click.option("--debug", is_flag=True, help="Debug mode.", default=False)
@@ -774,18 +774,18 @@ def cli(start_x, start_y, end_x, end_y, bishop_x, bishop_y, n, debug):
 
 @cli_wrapper.command(help="Run the program with profiling.")
 @click.option(
-    "--start_x", default=DEFAULT_START_X, help="Start x position.", prompt=True
+    "--start-x", default=DEFAULT_START_X, help="Start x position.", prompt=True
 )
 @click.option(
-    "--start_y", default=DEFAULT_START_Y, help="Start y position.", prompt=True
+    "--start-y", default=DEFAULT_START_Y, help="Start y position.", prompt=True
 )
-@click.option("--end_x", default=DEFAULT_END_X, help="End x position.", prompt=True)
-@click.option("--end_y", default=DEFAULT_END_Y, help="End y position.", prompt=True)
+@click.option("--end-x", default=DEFAULT_END_X, help="End x position.", prompt=True)
+@click.option("--end-y", default=DEFAULT_END_Y, help="End y position.", prompt=True)
 @click.option(
-    "--bishop_x", default=DEFAULT_BISHOP_X, help="Bishop x position.", prompt=True
+    "--bishop-x", default=DEFAULT_BISHOP_X, help="Bishop x position.", prompt=True
 )
 @click.option(
-    "--bishop_y", default=DEFAULT_BISHOP_Y, help="Bishop y position.", prompt=True
+    "--bishop-y", default=DEFAULT_BISHOP_Y, help="Bishop y position.", prompt=True
 )
 @click.option("--n", default=DEFAULT_N, help="Chess board size.", prompt=True)
 def profile(start_x, start_y, end_x, end_y, bishop_x, bishop_y, n):
@@ -805,18 +805,18 @@ def profile(start_x, start_y, end_x, end_y, bishop_x, bishop_y, n):
 
 @cli_wrapper.command(help="Run the program GUI.")
 @click.option(
-    "--start_x", default=DEFAULT_START_X, help="Start x position.", prompt=True
+    "--start-x", default=DEFAULT_START_X, help="Start x position.", prompt=True
 )
 @click.option(
-    "--start_y", default=DEFAULT_START_Y, help="Start y position.", prompt=True
+    "--start-y", default=DEFAULT_START_Y, help="Start y position.", prompt=True
 )
-@click.option("--end_x", default=DEFAULT_END_X, help="End x position.", prompt=True)
-@click.option("--end_y", default=DEFAULT_END_Y, help="End y position.", prompt=True)
+@click.option("--end-x", default=DEFAULT_END_X, help="End x position.", prompt=True)
+@click.option("--end-y", default=DEFAULT_END_Y, help="End y position.", prompt=True)
 @click.option(
-    "--bishop_x", default=DEFAULT_BISHOP_X, help="Bishop x position.", prompt=True
+    "--bishop-x", default=DEFAULT_BISHOP_X, help="Bishop x position.", prompt=True
 )
 @click.option(
-    "--bishop_y", default=DEFAULT_BISHOP_Y, help="Bishop y position.", prompt=True
+    "--bishop-y", default=DEFAULT_BISHOP_Y, help="Bishop y position.", prompt=True
 )
 @click.option("--n", default=DEFAULT_N, help="Chess board size.", prompt=True)
 @click.option("--debug", is_flag=True, help="Debug mode.", default=False)
