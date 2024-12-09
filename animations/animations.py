@@ -98,7 +98,10 @@ class KnightMoves:
             ]
         ):
             raise ValueError("Invalid input")
-        if (self.start_x, self.start_y) == (self.bishop_x, self.bishop_y) or (self.end_x, self.end_y) == (
+        if (self.start_x, self.start_y) == (self.bishop_x, self.bishop_y) or (
+            self.end_x,
+            self.end_y,
+        ) == (
             self.bishop_x,
             self.bishop_y,
         ):
