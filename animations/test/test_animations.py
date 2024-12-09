@@ -35,14 +35,20 @@ class TestKnightMoves(unittest.TestCase):
         """
         get a single test case
         """
-        n = r.randint(2, 100)
-        start_x = r.randint(0, n - 1)
-        start_y = r.randint(0, n - 1)
-        end_x = r.randint(0, n - 1)
-        end_y = r.randint(0, n - 1)
-        bishop_x = r.randint(0, n - 1)
-        bishop_y = r.randint(0, n - 1)
+        n = r.randint(3, 100)
+        start_x, start_y = self._get_random_position(n)
+        end_x, end_y = self._get_random_position(n)
+        bishop_x, bishop_y = self._get_random_position(n)
+        while (bishop_x, bishop_y) == (start_x, start_y) or (bishop_x, bishop_y) == (end_x, end_y):
+            bishop_x, bishop_y = self._get_random_position(n)
         return start_x, start_y, end_x, end_y, bishop_x, bishop_y, n
+
+    
+    def _get_random_position(self, n):
+        """
+        get a random position
+        """
+        return r.randint(0, n - 1), r.randint(0, n - 1)
 
 
 if __name__ == "__main__":

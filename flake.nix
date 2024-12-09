@@ -54,10 +54,10 @@
               export PATH="${pkgs.lib.makeBinPath buildInputs}";
               mkdir -p .cache/texmf-var
               env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-                latexmk -interaction=nonstopmode -pdf -pdflatex -f \
+                latexmk -interaction=nonstopmode -pdf -pdflatex \
                 outline.tex
               env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-                latexmk -interaction=nonstopmode -pdf -pdflatex -f \
+                latexmk -interaction=nonstopmode -pdf -pdflatex \
                 presentation.tex
             '';
             installPhase = ''

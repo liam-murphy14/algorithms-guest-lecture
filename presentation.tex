@@ -71,7 +71,7 @@ Now, the bishop moves on diagonals. That is, given a position $(p,q)$ on the boa
 	\EndIf
 	\Return{true}
 \EndProcedure
-\Procedure{Is-Valid-Bishop}{$x,y,A$}
+\Procedure{Is-Safe-From-Bishop}{$x,y,A$}
 	\If{$(x,y)$ in $A$}
 		\Return{false}
 	\EndIf
@@ -127,7 +127,7 @@ Now, the bishop moves on diagonals. That is, given a position $(p,q)$ on the boa
 				\State{$x_{new}\gets v.x+col[i]$}
 				\State{$y_{new}\gets v.y+row[i]$}
 				\If{$b=true$}
-					\If{\Call{Is-Valid}{$x_{new},y_{new},n$} and \Call{Is-Valid-Bishop}{$x_{new},y_{new},A$}}
+					\If{\Call{Is-Valid}{$x_{new},y_{new},n$} and \Call{Is-Safe-From-Bishop}{$x_{new},y_{new},A$}}
 						\State{$Q.add(\Call{Make-Node}{x_{new},y_{new},v.d+1})$}
 					\EndIf
 				\Else
@@ -166,7 +166,15 @@ Now, the bishop moves on diagonals. That is, given a position $(p,q)$ on the boa
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+\section*{Analysis}
+To analyze this solution, we will use a slightly different method than what you may be used to. Instead of expressing the complexity in terms of the input chess board size, $n$, we will express it in terms of the distance between the start and end positions. This will help us understand more accurately how long the algorithm will take to run, which is particularly important for coding interviews.\\
+
+In each position, the knight has 8 possible moves. If the start and end positions are $d$ moves apart, then the number of nodes we will visit is $O(8^{d+1})$. This is because the number of nodes we visit at each level of the BFS is $8^{s+1}$, where $s$ is the distance from the start node, and we will visit exactly $d$ levels, since BFS always finds the shortest path.\\
+
+Therefore, the time complexity of this algorithm is $O(8^{d+1})=O(8^d)$. The space complexity is $O(8^d)$ as well, since we will store all the nodes we visit in the queue and visited set.\\
 \section*{Optimizations}
-While this solution should be able to handle pretty large instances of the problem, what if we get a really, really big one? If the start and end are sufficiently far away, our algorithm may take too long to find a solution (at least, too long for hackerrank). How can we optimize?\\
+While this solution should be able to handle pretty large instances of the problem, what if we get a really, really big one, where the start and end node are very far apart? If the start and end are sufficiently far away, our algorithm may take too long to find a solution (at least, too long for HackerRank). How can we optimize?\\
 \textbf{Idea:} Run a modified BFS from either end, and see if/where they meet!
+\section*{Analysis}
+If we run a BFS from both the start and end positions, we can find the shortest path in $O(8^{d/2}+8^{d/2})=O(8^{d/2})$ time, where $d$ is the distance between the start and end positions. This is because the two BFS searches will meet in the middle, and the total number of nodes visited by each instance of BFS will be $O(8^{d/2})$. The space complexity is also $O(8^{d/2})$, since we will store all the nodes we visit in the queue and visited set.\\
 \end{document}

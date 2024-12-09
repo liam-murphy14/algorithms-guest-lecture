@@ -76,11 +76,33 @@ class KnightMoves:
         """
         Run the CLI.
         """
+        self._validate_input()
         self.running = True
         click.echo(f"Shortest path length unoptimized BFS: {self.unoptimized_bfs()}")
         click.echo(f"Shortest path length BFS: {self.bfs(with_gui=False)}")
         click.echo(f"Shortest path length DBFS: {self.dbfs(with_gui=False)}")
         self.running = False
+
+    def _validate_input(self):
+        """
+        Validate input.
+        """
+        if not all(
+            [
+                0 <= self.start_x < self.n,
+                0 <= self.start_y < self.n,
+                0 <= self.end_x < self.n,
+                0 <= self.end_y < self.n,
+                0 <= self.bishop_x < self.n,
+                0 <= self.bishop_y < self.n,
+            ]
+        ):
+            raise ValueError("Invalid input")
+        if (self.start_x, self.start_y) == (self.bishop_x, self.bishop_y) or (self.end_x, self.end_y) == (
+            self.bishop_x,
+            self.bishop_y,
+        ):
+            raise ValueError("Invalid input")
 
     def _simple_bfs(
         self,
@@ -554,8 +576,7 @@ class KnightMoves:
         """
         Start the animation loop
         """
-        self.run_buttons_frame.pack_forget()
-        self.cancel_buttons_frame.pack(pady=20)
+        self.counter_text.set("Visited: 0 nodes")
         self.start_x = self.start_x_gui.get()
         self.start_y = self.start_y_gui.get()
         self.end_x = self.end_x_gui.get()
@@ -566,6 +587,15 @@ class KnightMoves:
             self.bishop_x, self.bishop_y, self.n
         )
         self.n = self.n_gui.get()
+
+        try:
+            self._validate_input()
+        except ValueError:
+            self.counter_text.set("Invalid input!")
+            return
+
+        self.run_buttons_frame.pack_forget()
+        self.cancel_buttons_frame.pack(pady=20)
         self.running = True
 
     def _stop(self):
