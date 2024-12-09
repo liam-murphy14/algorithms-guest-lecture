@@ -251,7 +251,10 @@ class KnightMoves:
         queue_start = deque()
         queue_end = deque()
         queue_start.append((self.start_x, self.start_y, 0, True))
-        queue_end.append((self.end_x, self.end_y, 0, True))
+        # end starts in a "superposition" of being bishop being alive and not being alive, since we don't know which one is correct yet, so need to search both paths, unless the end position is threatened by the bishop, since then we must capture the bishop
+        queue_end.append((self.end_x, self.end_y, 0, False))
+        if not (self.end_x, self.end_y) in self.bishop_positions:
+            queue_end.append((self.end_x, self.end_y, 0, True))
         num_visited = 0
         while queue_start and queue_end:
             try:
@@ -268,17 +271,11 @@ class KnightMoves:
                 self.logger.debug(f"Found after {num_visited} nodes")
                 return distance
 
-            if (x, y, True) in visited_end:
+            if (x, y, is_bishop_alive) in visited_end:
                 if with_gui:
                     self._update_ui(x, y, num_visited)
                 self.logger.debug(f"Found after {num_visited} nodes")
-                return distance + visited_end[(x, y, True)]
-
-            if (x, y, False) in visited_end:
-                if with_gui:
-                    self._update_ui(x, y, num_visited)
-                self.logger.debug(f"Found after {num_visited} nodes")
-                return distance + visited_end[(x, y, False)]
+                return distance + visited_end[(x, y, is_bishop_alive)]
 
             if (x, y, is_bishop_alive) in visited_start:
                 self.logger.debug(f"Already visited {(x, y, is_bishop_alive)}")
@@ -315,23 +312,11 @@ class KnightMoves:
 
             x, y, distance, is_bishop_alive = queue_end.popleft()
 
-            if (x, y) == (self.start_x, self.start_y):
+            if (x, y, is_bishop_alive) in visited_start:
                 if with_gui:
                     self._update_ui(x, y, num_visited)
                 self.logger.debug(f"Found after {num_visited} nodes")
-                return distance
-
-            if (x, y, True) in visited_start:
-                if with_gui:
-                    self._update_ui(x, y, num_visited)
-                self.logger.debug(f"Found after {num_visited} nodes")
-                return distance + visited_start[(x, y, True)]
-
-            if (x, y, False) in visited_start:
-                if with_gui:
-                    self._update_ui(x, y, num_visited)
-                self.logger.debug(f"Found after {num_visited} nodes")
-                return distance + visited_start[(x, y, False)]
+                return distance + visited_start[(x, y, is_bishop_alive)]
 
             if (x, y, is_bishop_alive) in visited_end:
                 self.logger.debug(f"Already visited {(x, y, is_bishop_alive)}")
@@ -353,10 +338,7 @@ class KnightMoves:
                 if is_bishop_alive and (new_x, new_y) in self.bishop_positions:
                     continue
                 if self._is_valid_position(new_x, new_y, self.n):
-                    if (new_x, new_y) == (self.bishop_x, self.bishop_y):
-                        queue_end.append((new_x, new_y, distance + 1, False))
-                    else:
-                        queue_end.append((new_x, new_y, distance + 1, is_bishop_alive))
+                    queue_end.append((new_x, new_y, distance + 1, is_bishop_alive))
         return -1
 
     def _update_ui(self, x: int, y: int, num_visited: int):

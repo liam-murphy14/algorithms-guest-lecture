@@ -41,6 +41,7 @@ class TestKnightMoves(unittest.TestCase):
             (3, 3, 1, 0, 1, 3, 4, 5),
             (3, 3, 4, 0, 3, 1, 5, 6),
             (17, 43, 14, 18, 38, 42, 47, 28),
+            (3, 7, 1, 1, 4, 3, 8, 4),
         ]
         for test_case in test_cases:
             start_x, start_y, end_x, end_y, bishop_x, bishop_y, n, expected = test_case
@@ -60,9 +61,9 @@ class TestKnightMoves(unittest.TestCase):
                 control = knight_moves.unoptimized_bfs()
                 bfs = knight_moves.bfs(with_gui=False)
                 dbfs = knight_moves.dbfs(with_gui=False)
-                self.assertEqual(control, expected)
-                self.assertEqual(bfs, expected)
-                self.assertEqual(dbfs, expected)
+                self.assertEqual(expected, control)
+                self.assertEqual(expected, bfs)
+                self.assertEqual(expected, dbfs)
 
     def _get_test_case(self):
         """
