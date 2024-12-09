@@ -103,6 +103,8 @@ class KnightMoves:
             self.bishop_y,
         ):
             raise ValueError("Invalid input")
+        if (self.start_x, self.start_y) in self.bishop_positions:
+            raise ValueError("Invalid input")
 
     def _simple_bfs(
         self,
