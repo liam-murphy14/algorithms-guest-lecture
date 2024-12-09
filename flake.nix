@@ -55,14 +55,11 @@
               mkdir -p .cache/texmf-var
               env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
                 latexmk -interaction=nonstopmode -pdf -pdflatex \
-                outline.tex
-              env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-                latexmk -interaction=nonstopmode -pdf -pdflatex \
                 presentation.tex
             '';
             installPhase = ''
               mkdir -p $out
-              cp outline.pdf presentation.pdf $out/
+              cp presentation.pdf $out/
             '';
           };
         });
