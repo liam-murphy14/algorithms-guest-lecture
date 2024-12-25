@@ -4,11 +4,11 @@ Finally threw all the parts of my lecture into a repo. Here is a quick overview
 
 ## Parts
 
-The Outline consists of `outline.pdf` and `outline.tex` which are the LaTeX input and output of the super duper rough draft outline. Presentation, consisting of `presentation.pdf` and `presentation.tex` are similar, but more polished. The really cool part is the `animations.py` demo.
+There are 3 main items in this repo. First, the Nix flake, `flake.nix`, provides the necessary environment and setup to both build the LaTeX presentation and Python demo. My lecture presentation, `presentation.tex`, is what I share on screen while giving the lecture. You can build it (after installing Nix) with `nix build .#documents`, otherwise you can install the TexLive environment and build it with `pdflatex`. The really cool part is the `animations` Python package containing the demo (details on how to run it below).
 
 ## Running the demo
 
-The demo is written in Python, using Tkinter for the GUI, and vanilla Python for the CLI.
+The demo is written in Python, using [Tkinter](https://docs.python.org/3/library/tkinter.html) for the GUI, and [Click](https://click.palletsprojects.com/en/stable/) for the CLI.
 
 ### Installing dependencies
 
